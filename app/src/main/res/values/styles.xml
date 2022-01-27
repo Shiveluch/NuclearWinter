@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ShopQ" >
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">#F5F6F5</item>
+        <item name="android:fontFamily">@font/graffiti</item>
+    </style>
+</resources>

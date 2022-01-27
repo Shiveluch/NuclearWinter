@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/backmap">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="50dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/perscode"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:background="@drawable/etstyle"
+            android:ems="10"
+            android:fontFamily="@font/graffiti"
+            android:hint="Личный код контакта"
+            android:imeOptions="flagNoExtractUi"
+            android:paddingLeft="10dp"
+            android:scrollbarSize="0dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#3BC1C1C1"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/persname"
+            style="@style/ShopQ"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="Контакт:"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"></LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom"
+        android:layout_alignParentBottom="false"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/checkcontact"
+            style="@style/ShopQ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/rustbutton"
+            android:text="Проверить\nконтакт"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/approvecontact"
+            style="@style/ShopQ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:alpha="0.5"
+            android:background="@drawable/rustbutton"
+            android:enabled="false"
+            android:text="Подтвердить\nконтакт"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/dismisscontact"
+            style="@style/ShopQ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/rustbutton"
+            android:text="Закрыть"
+            android:textSize="16sp" />
+    </LinearLayout>
+</RelativeLayout>

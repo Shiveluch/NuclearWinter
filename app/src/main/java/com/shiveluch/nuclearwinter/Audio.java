@@ -17,4 +17,10 @@ public class Audio {
 
         mp.start();
     }
+
+    public void playStart() {
+        mp = MediaPlayer.create(context, R.raw.sidor);
+
+        mp.start();
+    }
 }

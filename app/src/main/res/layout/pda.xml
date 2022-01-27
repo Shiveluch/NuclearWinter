@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainRL"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/sback3"
@@ -25,6 +26,1120 @@
                 android:layout_weight="1.3"
                 android:orientation="horizontal">
 
+
+                <LinearLayout
+                    android:id="@+id/invLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="25dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/inventory"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/ramka">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/invmoney"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/graffiti"
+                                android:gravity="center_vertical"
+                                android:text="TextView"
+                                android:textColor="#FFAA00"
+                                android:textSize="16sp" />
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1">
+
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                        <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginBottom="20dp"
+                            tools:ignore="SpeakableTextPresentCheck">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:id="@+id/block1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="left"
+                                    android:gravity="left"
+                                    android:orientation="horizontal">
+
+                                    <RelativeLayout
+                                        android:id="@+id/invmedikit"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvmedikit"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/medikit" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvmedikit"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:id="@+id/invantirad"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvantirad"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/antirad" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvantiradq"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:id="@+id/invrepair"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvremont"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/remont" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvrepair"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:id="@+id/invbint"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvbint"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/bint" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvbint"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/block2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="left"
+                                    android:gravity="left"
+                                    android:orientation="horizontal">
+
+                                    <RelativeLayout
+                                        android:id="@+id/invbaton"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvbaton"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/baton" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvbaton"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:id="@+id/invtushenka"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvtushenka"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/tushenka" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvtushenka"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:id="@+id/invkolbasa"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvkolbasa"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/kolbasa" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvkolbasa"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="20">
+
+                                    </RelativeLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/block3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="left"
+                                    android:gravity="left"
+                                    android:orientation="horizontal">
+
+                                    <RelativeLayout
+                                        android:id="@+id/invkalash"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvkalash"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/ak47" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvkalash"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/block4"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="left"
+                                    android:gravity="left"
+                                    android:orientation="horizontal">
+
+                                    <RelativeLayout
+                                        android:id="@+id/invsvd"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvsvd"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/svd" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvsvd"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/block5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="left"
+                                    android:gravity="left"
+                                    android:orientation="horizontal">
+
+                                    <RelativeLayout
+                                        android:id="@+id/invobrez"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvobrez"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/obrez" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvobrez"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/block6"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="left"
+                                    android:gravity="left"
+                                    android:orientation="horizontal">
+
+                                    <RelativeLayout
+                                        android:id="@+id/invpistol"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvpistol"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/pistol" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvpistol"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+
+                                    <RelativeLayout
+                                        android:id="@+id/invpistolammo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvpistolammo"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/pistolammo" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvpistolammo"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+
+                                    <RelativeLayout
+                                        android:id="@+id/invobrezammo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvobrezammo"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/drob" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvobrezammo"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:id="@+id/invkalashammo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvkalashammo"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/kalashammo" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvkalashammo"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:id="@+id/invsvdammo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvsvdammo"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/svdammo" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvsvdammo"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:id="@+id/block7"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="left"
+                                    android:gravity="left"
+                                    android:orientation="horizontal">
+
+                                    <RelativeLayout
+                                        android:id="@+id/invzaria"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvzaria"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/zaria" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvzaria"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:id="@+id/invseva"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvseva"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/seva" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvseva"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="10">
+
+                                    </RelativeLayout>
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/block8"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="left"
+                                    android:gravity="left"
+                                    android:orientation="horizontal">
+
+                                    <RelativeLayout
+                                        android:id="@+id/invecolog"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvecolog"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/ecolog" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvecolog"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/block9"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="left"
+                                    android:layout_marginTop="30dp"
+                                    android:gravity="left"
+                                    android:orientation="horizontal">
+
+                                    <RelativeLayout
+                                        android:id="@+id/invshar"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvshar"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/shar" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvshar"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:id="@+id/invdusha"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvdusha"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/dusha" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvdusha"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:id="@+id/invmoonlight"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvmoonlite"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/moonlight" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvmoonlite"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="10">
+
+                                    </RelativeLayout>
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/block10"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="left"
+                                    android:layout_marginTop="30dp"
+                                    android:gravity="left"
+                                    android:orientation="horizontal">
+
+
+                                    <RelativeLayout
+                                        android:id="@+id/invpust"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvpust"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/pustsmall" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvpust"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:id="@+id/invflower"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <ImageView
+                                                android:id="@+id/imageinvflower"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:foregroundGravity="center"
+                                                app:srcCompat="@drawable/flowersmall" />
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/qinvflower"
+                                            style="@style/ShopQ"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="x10" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="10">
+
+                                    </RelativeLayout>
+
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </ScrollView>
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/locationLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="25dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ListView
+                        android:id="@+id/stalkerslist"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:dividerHeight="5dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/chatLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:layout_weight="1.3"
+                        android:orientation="vertical">
+
+                        <ListView
+                            android:id="@+id/chat"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@id/chatreceqiver"
+                            android:layout_marginBottom="5dp"
+                            android:layout_weight="1.3"
+                            android:stackFromBottom="true" />
+
+                        <LinearLayout
+                            android:id="@+id/chatreceqiver"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@id/chatbottom"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_weight="1.3"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/receivername"
+                                style="@style/ShopQ"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.3"
+                                android:text="Получатель: НЕ ВЫБРАН"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/chatbottom"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_weight="8"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/message"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/etstyle"
+                                android:ems="10"
+                                android:fontFamily="@font/graffiti"
+                                android:hint="Текст сообщения"
+                                android:imeOptions="flagNoExtractUi"
+                                android:scrollbarSize="0dp"
+                                android:textColor="#BFCF1D"
+                                android:textColorHint="#3BC1C1C1"
+                                android:textSize="18sp" />
+
+                            <ImageView
+                                android:id="@+id/send"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_weight="8"
+                                app:srcCompat="@android:drawable/ic_menu_send" />
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:orientation="vertical">
+
+                        <ListView
+                            android:id="@+id/contacts"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="25dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_weight="1" />
+
+                        <Button
+                            android:id="@+id/newcontact"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/button"
+                            android:fontFamily="@font/graffiti"
+                            android:text="Добавить контакт" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/MapRL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="25dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:id="@+id/bottompanel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/showmap"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:srcCompat="@android:drawable/ic_menu_mapmode" />
+
+                        <ImageView
+                            android:id="@+id/showme"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:srcCompat="@android:drawable/ic_menu_compass" />
+
+                        <ImageView
+                            android:id="@+id/search"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:srcCompat="@android:drawable/ic_menu_search" />
+
+                        <ImageView
+                            android:id="@+id/showloc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:srcCompat="@android:drawable/ic_menu_mylocation"
+                            app:tint="#FF0000" />
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/maplayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:focusable="true">
+
+                        <fragment
+                            android:id="@+id/map"
+                            android:name="com.google.android.gms.maps.SupportMapFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </RelativeLayout>
+
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:id="@+id/encyclopedia"
@@ -55,66 +1170,56 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/mapchat"
+                    android:id="@+id/infoRL"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="80dp"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="25dp"
                     android:layout_weight="1"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1.3"
                         android:orientation="vertical">
 
-                        <LinearLayout
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            app:srcCompat="@drawable/st1" />
+
+                        <ScrollView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_weight="8"
-                            android:orientation="horizontal">
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_toRightOf="@id/imageView2">
 
-                            <EditText
-                                android:id="@+id/message"
+                            <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="30dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/etstyle"
-                                android:ems="10"
-                                android:fontFamily="@font/graffiti"
-                                android:hint="Текст сообщения"
-                                android:imeOptions="flagNoExtractUi"
-                                android:scrollbarSize="0dp"
-                                android:textColor="#BFCF1D"
-                                android:textColorHint="#3BC1C1C1"
-                                android:textSize="18sp" />
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
 
-                            <ImageView
-                                android:id="@+id/send"
-                                android:layout_width="match_parent"
-                                android:layout_height="30dp"
-                                android:layout_weight="8"
-                                app:srcCompat="@android:drawable/ic_menu_send" />
-
-                        </LinearLayout>
-
-                        <ListView
-                            android:id="@+id/chat"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="1.3"
-                            android:stackFromBottom="true" />
-
-                    </LinearLayout>
+                                <TextView
+                                    android:id="@+id/textView3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/graffiti"
+                                    android:text="Функции ПДА открываются путем нажатия на кнопки в нижней части экрана.\n\nВ чат можно писать одному конкретному человеку, находящемуся в контакт-листе.  Для того, чтобы добавить адресата, надо знать его персональный код, который он ввел при регистрации. Можно попробовать добавить меня, мой персональный код – 5212, позывной Shiveluch. Сообщения, отправленные в чат больше 10 минут назад, не будут отображаться.\n\n Функции карты и локаций доступны только после определения своих координат, до того карта и локации открываться не будут. Чтобы взаимодействовать с локациями, необходимо оказаться в радиусе не более 500 метров от них в реальном мире. Приложение само генерирует места нахождения локаций, выставляя их координаты в радиусе до 5 километров от центра города, определенного как ближайший к вам. Здесь возможны проблемы в виде нахождения локаций в труднодоступных местах (вода, болота, горы, закрытые объекты и т.д.). Пишите мне в почту (не в приложение), будем подстраивать." />
+                            </LinearLayout>
+                        </ScrollView>
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1.1"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -140,105 +1245,25 @@
                                 android:layout_weight="1"
                                 android:ems="10"
                                 android:fontFamily="@font/graffiti"
-                                android:hint="Личный код"
+                                android:hint="Личный код получателя"
                                 android:imeOptions="flagNoExtractUi"
                                 android:inputType="textPersonName"
                                 android:textSize="14sp" />
                         </LinearLayout>
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ListView
-                                android:id="@+id/stalkerslist"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:dividerHeight="5dp"
-                                tools:visibility="gone" />
-
-                            <RelativeLayout
-                                android:id="@+id/maplayout"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-
-                                <fragment
-                                    android:id="@+id/map"
-                                    android:name="com.google.android.gms.maps.SupportMapFragment"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent" />
-
-                            </RelativeLayout>
-
-                            <LinearLayout
-                                android:id="@+id/bottompanel"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:orientation="horizontal"
-                                android:visibility="gone">
-
-                                <ImageView
-                                    android:id="@+id/showmap"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    app:srcCompat="@android:drawable/ic_menu_mapmode" />
-
-                                <ImageView
-                                    android:id="@+id/showme"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    app:srcCompat="@android:drawable/ic_menu_compass" />
-
-                                <ImageView
-                                    android:id="@+id/search"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    app:srcCompat="@android:drawable/ic_menu_search" />
-
-                                <ImageView
-                                    android:id="@+id/showloc"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    app:srcCompat="@android:drawable/ic_menu_mylocation"
-                                    app:tint="#FF0000" />
-                            </LinearLayout>
-                        </RelativeLayout>
                     </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center|center_horizontal|center_vertical"
-                    android:layout_weight="6"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-
-                    <ImageView
-                        android:id="@+id/centralbutton"
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="70dp"
-                        android:background="#00FFFFFF"
-                        android:visibility="visible" />
-                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/lbottompanel"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="80dp"
-                android:layout_marginRight="130dp"
-                android:layout_marginBottom="50dp"
-                android:layout_weight="5"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="25dp"
+                android:layout_weight="8"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
@@ -272,7 +1297,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/graffiti"
                     android:gravity="center"
-                    android:text="Найти локацию"
+                    android:text="Локации"
                     android:textStyle="bold" />
 
                 <TextView
@@ -283,8 +1308,21 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/graffiti"
                     android:gravity="center"
-                    android:text="Скрыть себя"
-                    android:textStyle="bold" />
+                    android:text="Чат"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/t_inventory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/graffiti"
+                    android:gravity="center"
+                    android:text="Инвентарь"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/t_enc"
@@ -295,6 +1333,17 @@
                     android:fontFamily="@font/graffiti"
                     android:gravity="center"
                     android:text="Энциклопедия"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/t_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/graffiti"
+                    android:gravity="center"
+                    android:text="Радио"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>

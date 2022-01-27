@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/graffiti"
         android:text="TextView"
+        android:textColor="#FBFAFA"
         android:textSize="14sp" />
 
     <TextView

@@ -16,21 +16,20 @@
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/infopic"
-        android:layout_weight="1"
         android:fontFamily="@font/graffiti"
         android:text="ЛОКАЦИЯ:"
-        android:textSize="20sp" />
+        android:textColor="#F3F3F3" />
 
     <TextView
         android:id="@+id/infoname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView"
+        android:layout_below="@id/textView2"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/infopic"
         android:layout_weight="3"
