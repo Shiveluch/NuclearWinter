@@ -5,4 +5,19 @@
         <item name="android:textColor">#F5F6F5</item>
         <item name="android:fontFamily">@font/graffiti</item>
     </style>
+
+    <style name="InvElement">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/invback</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="BasicText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:fontFamily">@font/graffiti</item>
+
+    </style>
 </resources>

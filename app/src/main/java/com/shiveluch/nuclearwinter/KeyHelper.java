@@ -36,15 +36,15 @@ public class KeyHelper {
                     toRet.append(hex);
                 }
 
-                Log.e(KeyHelper.class.getSimpleName(), key + " " + toRet.toString());
+                //Log.e(KeyHelper.class.getSimpleName(), key + " " + toRet.toString());
                 fpr=toRet.toString();
             }
         } catch (PackageManager.NameNotFoundException e1) {
-            Log.e("name not found", e1.toString());
+           // Log.e("name not found", e1.toString());
         } catch (NoSuchAlgorithmException e) {
-            Log.e("no such an algorithm", e.toString());
+           // Log.e("no such an algorithm", e.toString());
         } catch (Exception e) {
-            Log.e("exception", e.toString());
+       //     Log.e("exception", e.toString());
         }
     }
 }

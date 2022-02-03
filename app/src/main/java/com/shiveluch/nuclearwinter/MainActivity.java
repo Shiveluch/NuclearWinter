@@ -1,6 +1,7 @@
 package com.shiveluch.nuclearwinter;
 
 import static java.lang.Math.cos;
+import static java.lang.Math.random;
 import static java.lang.Math.sin;
 
 import androidx.annotation.NonNull;
@@ -21,8 +22,11 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Interpolator;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -33,6 +37,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.StrictMode;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
@@ -40,6 +47,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -61,6 +69,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -86,13 +95,17 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -103,14 +116,16 @@ public class MainActivity extends AppCompatActivity
         implements OnMapReadyCallback, MediaPlayer.OnCompletionListener,GoogleApiClient.OnConnectionFailedListener {
 
     ImageView send, showmap, showme, search, centralbutton, showloc;
-    EditText message, player, passcode;
-    TextView t_map, t_showme, t_find, t_loc, t_enc, t_radio, t_inventory, persname;
+    EditText message, passcode;
+    TextView t_map, t_showme, t_find, t_loc, t_enc, t_radio, t_inventory, persname, player;
     LinearLayout chatLL, encyclopedia, infoRL, locLL;
     RelativeLayout mapRL;
     Button contactapprove;
     GoogleMap mMap;
+    float getZoom=17;
     boolean isPLAYING=false;
     boolean mapReady=false;
+    String resDomain="http://a0568345.xsph.ru/winter/res/";
     String getchat = "";
     String getNewChat="";
     String city = "";
@@ -121,10 +136,15 @@ public class MainActivity extends AppCompatActivity
     int itemquantity=0;
     int sellprice=0, buyprice=0;
     int contactID=0;
+    int botcounter=0;
+    int chatcounter=0;
+    //BotMutant krovosos, snork, controler;
+    BotMutant [] mutant;
 
     String getStalkers="http://a0568345.xsph.ru/winter/getstalkers.php";
     String getVersion="http://a0568345.xsph.ru/winter/getversion.php";
     String getLocs="";
+    String getMonsters = "http://a0568345.xsph.ru/winter/getmonsters.php";
     String getCount="http://a0568345.xsph.ru/winter/getlast.php";
     String getaudio = "https://volcanorp.ru/tracks/getfilescount.php";
     String getCitiesLoc = "http://a0568345.xsph.ru/winter/getcities.php";
@@ -136,7 +156,8 @@ public class MainActivity extends AppCompatActivity
     int lastchatid=0;
     int tradeOperationCode=0;
     Button newcontact;
-
+    Marker [] mutantMarker = new Marker[10];
+    int timerCounter=0;
 
     SupportMapFragment mapFragment;
     ListView chat, stalkerslist, menu, info;
@@ -160,12 +181,23 @@ public class MainActivity extends AppCompatActivity
     public final static String NICK = "nick";
     public final static String ID = "id";
     public final static String START = "start";
+    public final static String DISTANCE = "distance";
+    public final static String WEAPON = "weapon";
+    public final static String SUIT = "suit";
 
     private GoogleApiClient mGoogleApiClient;
     //ArrayList<Drawables> drawables = new ArrayList();
     ArrayList<Shopunits> shopunits = new ArrayList();
     ArrayList<PlayerUnits> playerunits = new ArrayList();
     ArrayList<Contacts> contacts=new ArrayList<>();
+    ArrayList<Integer> weapons = new ArrayList<>();
+    ArrayList<Integer> suits = new ArrayList<>();
+    ArrayList<Mutants> mutants = new ArrayList<>();
+    ArrayList<BotMutant> mutantbase = new ArrayList<>();
+    ArrayList<Integer> mutantIcons=new ArrayList<>();
+    ArrayList<Integer> mutantPics=new ArrayList<>();
+    ArrayList<Integer> mutantSounds=new ArrayList<>();
+
 
 
 
@@ -179,6 +211,7 @@ public class MainActivity extends AppCompatActivity
 
     String [] menuArray={"Персонажи", "Группировки", "Аномалии","Артефакты","Оружие" };
     String [] menyScriptsArray={"getpers", "getgroup", "getanomaly","getarts", "getweapon"};
+
 ArrayList<String> alllocations=new ArrayList<>();
 
 
@@ -189,12 +222,19 @@ ArrayList<String> alllocations=new ArrayList<>();
     Location comLocation;
     private Timer mTimer;
     private MyTimerTask mMyTimerTask;
+
+    private Timer botMoveTimer;
+    private BotTimerTask botTimerTask;
+
+
     LatLng position = new LatLng(66, 94);
     String lastID="0";
     boolean mode=true;
     boolean sendmessage=true;
     Activity activity;
     ArrayList<CityLoc> cityLocs = new ArrayList<>();
+    Weapons weapon = new Weapons();
+    Suits suit = new Suits();
     AlertDialog.Builder authalert;
     AlertDialog authdialog;
 
@@ -212,6 +252,7 @@ ArrayList<String> alllocations=new ArrayList<>();
     protected void onResume() {
         super.onResume();
         activity=this;
+        mutants.clear();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 50);
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 50);
@@ -226,7 +267,16 @@ ArrayList<String> alllocations=new ArrayList<>();
         checkEnabled();
         mTimer = new Timer();
         mMyTimerTask = new MyTimerTask();
-        mTimer.schedule(mMyTimerTask, 3000, 10000);
+        mTimer.schedule(mMyTimerTask, 3000, 1000);
+
+        botMoveTimer = new Timer();
+        botTimerTask = new BotTimerTask();
+        botMoveTimer.schedule(botTimerTask, 1000, 5000);
+
+        weapons = weapon.setWeapons();
+        suits = suit.setSuits();
+
+        //Log.d("Suit", "suit is "+suits.get(1));
         send = findViewById(R.id.send);
         send.setOnClickListener(v -> {
 
@@ -259,6 +309,8 @@ ArrayList<String> alllocations=new ArrayList<>();
         //}
         });
 
+        getJSON(getMonsters);
+
     }
 
     @Override
@@ -287,14 +339,16 @@ ArrayList<String> alllocations=new ArrayList<>();
 
         context = getApplicationContext();
         activity=this;
+
         getJSON(getVersion);
+
 
 
        // setToast("Проверка аутентификации");
         setShopUnits();
         KeyHelper.get(this,"SHA1");
 
-        Log.e("Statickey", KeyHelper.fpr);
+   //     //Log.e("Statickey", KeyHelper.fpr);
 
      //   new uploadVolcAsyncTask().execute("loginauth",KeyHelper.fpr,"","","","","","","");
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -321,7 +375,7 @@ ArrayList<String> alllocations=new ArrayList<>();
             startActivityForResult(signInIntent, 115);
             RelativeLayout mainRL=findViewById(R.id.mainRL);
             mainRL.setVisibility(View.VISIBLE);
-            Log.e("isStart", "IsData");
+       //     //Log.e("isStart", "IsData");
             new uploadVolcAsyncTask().execute("getcontact",KeyHelper.fpr,settings.getString(ID,""),"","","","","","");
 
 
@@ -331,7 +385,7 @@ ArrayList<String> alllocations=new ArrayList<>();
         String cities = settings.getString(CITIES,"");
         if (cities.length()==0)
         {
-          //  Log.d("cities", "noCities");
+          //  //Log.d("cities", "noCities");
             getJSON(getCitiesLoc);}
         else {cityLocs.clear();setCityLocArray();}
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -343,7 +397,7 @@ ArrayList<String> alllocations=new ArrayList<>();
 
         chat = findViewById(R.id.chat);
         message = findViewById(R.id.message);
-        player = findViewById(R.id.player);
+        player = findViewById(R.id.locinfo);
         passcode = findViewById(R.id.passcode);
         bottompanel=findViewById(R.id.bottompanel);
         showmap=findViewById(R.id.showmap);
@@ -442,7 +496,7 @@ t_inventory.setOnClickListener(new View.OnClickListener() {
                 mode=false;
                 CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(position)
-                        .zoom(15)
+                        .zoom(getZoom)
                         .build();
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
                 mMap.animateCamera(cameraUpdate);
@@ -455,7 +509,7 @@ t_inventory.setOnClickListener(new View.OnClickListener() {
                 if (!mapReady) return;
                 CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(position)
-                        .zoom(15)
+                        .zoom(getZoom)
                         .build();
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
                 mMap.animateCamera(cameraUpdate);
@@ -498,7 +552,7 @@ t_inventory.setOnClickListener(new View.OnClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView script=view.findViewById(R.id.description);
 
-          //      Log.d("Menu",script.getText().toString()+".php");
+          //      //Log.d("Menu",script.getText().toString()+".php");
                 getperc="http://a0568345.xsph.ru/winter/"+script.getText().toString()+".php";
                 getJSON(getperc);
             }
@@ -554,13 +608,13 @@ t_inventory.setOnClickListener(new View.OnClickListener() {
                 double stalkerLat, stalkerLon;
                 stalkerLat=Double.parseDouble(lat.getText().toString());
                 stalkerLon=Double.parseDouble(lon.getText().toString());
-            //    Log.d("position", ""+position);
+            //    //Log.d("position", ""+position);
 
 if (stalkerLat<1) {
     Toast.makeText(getApplicationContext(),"Местонахождение неизвестно",Toast.LENGTH_LONG).show();
-    RelativeLayout mapRL=findViewById(R.id.maplayout);
-    mapRL.setVisibility(View.VISIBLE);
-    stalkerslist.setVisibility(View.GONE);
+//    RelativeLayout mapRL=findViewById(R.id.maplayout);
+//    mapRL.setVisibility(View.VISIBLE);
+//    stalkerslist.setVisibility(View.GONE);
     bottompanel.setVisibility(View.VISIBLE);
 
     return;
@@ -569,7 +623,7 @@ if (stalkerLat<1) {
 }
                 if (mapReady){
                     int dist=(int)grouplocs.get(position).distance;
-                    if (dist>5000000)
+                    if (dist>settings.getInt(DISTANCE,500))
                     {    if (stalker!=null) stalker.remove();
                     stalker=(mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(stalkerLat,stalkerLon))
@@ -577,16 +631,17 @@ if (stalkerLat<1) {
                             .icon(getBitmapHighDescriptor(R.drawable.stalker))));
                     CameraPosition cameraPosition = new CameraPosition.Builder()
                             .target(new LatLng(stalkerLat,stalkerLon))
-                            .zoom(15)
+                            .zoom(getZoom)
                             .build();
                     CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
                     mMap.animateCamera(cameraUpdate);
-                    RelativeLayout mapRL=findViewById(R.id.maplayout);
+                    RelativeLayout mapRL=findViewById(R.id.MapRL);
                     mapRL.setVisibility(View.VISIBLE);
-                    stalkerslist.setVisibility(View.GONE);}
-                    if (dist<=5000000)
+                    locLL.setVisibility(View.GONE);}
+                    if (dist<=settings.getInt(DISTANCE,500))
                     {
                         setToast("Магазин");
+
                         getinventory = "https://volcanorp.ru/winter/getinventory.php/?nom="+email;
                         currentposition=position;
                         getParametricJSON(getinventory, position,"","");
@@ -610,7 +665,7 @@ t_showme.setOnClickListener(new View.OnClickListener() {
                 return;}
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(Double.parseDouble(lat),Double.parseDouble(lon)))
-                    .zoom(15)
+                    .zoom(getZoom)
                     .build();
             CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
             mMap.animateCamera(cameraUpdate);
@@ -629,7 +684,7 @@ t_showme.setOnClickListener(new View.OnClickListener() {
                     return;}
                 CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(new LatLng(Double.parseDouble(lat),Double.parseDouble(lon)))
-                        .zoom(15)
+                        .zoom(getZoom)
                         .build();
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
                 mMap.animateCamera(cameraUpdate);
@@ -698,7 +753,7 @@ t_showme.setOnClickListener(new View.OnClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView del=view.findViewById(R.id.p_id);
                 String deleting=del.getText().toString();
-                //     Log.d("isDel",deleting);
+                //     //Log.d("isDel",deleting);
                 //int forDel=10000000;
                 showDialog(deleting);
             }
@@ -724,7 +779,7 @@ t_showme.setOnClickListener(new View.OnClickListener() {
                 contactlist.setAdapter(adapter);
                 recname.setText("Получатель: "+ contacts.get(pos).name);
                 currentreceiver=contacts.get(pos).id;
-                Log.d("id", ""+currentreceiver);
+                //Log.d("id", ""+currentreceiver);
 
             }
         });
@@ -736,7 +791,6 @@ t_showme.setOnClickListener(new View.OnClickListener() {
 
     @Override
     public void onBackPressed() {
-        shopdialog.dismiss();
         super.onBackPressed();
     }
     AlertDialog.Builder shopalert;
@@ -793,10 +847,10 @@ t_showme.setOnClickListener(new View.OnClickListener() {
             shopitems[i].setTag(i);
             int finalI = i;
             shopitems[i].setOnClickListener(view1 -> {
-            //    Log.d("Item is", ""+ shopitems[finalI].getTag()+", "+"field is "+shopunits.get(finalI).field);
+            //    //Log.d("Item is", ""+ shopitems[finalI].getTag()+", "+"field is "+shopunits.get(finalI).field);
                 itemfield = shopunits.get(finalI).field;
                 getSellPrices = "http://a0568345.xsph.ru/winter/getsellprice.php/get.php?nom="+(finalI+1)+"&dp="+currentloc;
-            //    Log.d("link", getSellPrices);
+            //    //Log.d("link", getSellPrices);
                 getJSON(getSellPrices);
                 shopdialog.dismiss();
             });
@@ -829,7 +883,7 @@ t_showme.setOnClickListener(new View.OnClickListener() {
 
         playeritems = new RelativeLayout[playerunits.size()];
         unitsquantity = new TextView[playerunits.size()];
-        Log.e("units", ""+playerunits.size()+", "+inventory.size());
+ //       //Log.e("units", ""+playerunits.size()+", "+inventory.size());
         for (int i = 0;i<playerunits.size();i++)
         {
             playeritems[i] = view.findViewById(playerunits.get(i).imageview);
@@ -848,7 +902,7 @@ t_showme.setOnClickListener(new View.OnClickListener() {
                 itemfield = playerunits.get(finalI).field;
                 itemquantity = Integer.parseInt(unitsquantity[finalI].getText().toString().replace("x",""));
                 getBuyPrices = "http://a0568345.xsph.ru/winter/getbuyprice.php/get.php?nom="+(finalI+1)+"&dp="+currentloc;
-         //       Log.d("link", getSellPrices);
+         //       //Log.d("link", getSellPrices);
                 getJSON(getBuyPrices);
                 shopdialog.dismiss();
             });
@@ -1021,7 +1075,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
                        return;
                    }
 
-                   String post="'"+_email+"','"+_nick+"','"+_pass+"',"+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+100+","+0+","+100+", "+1000;
+                   String post="'"+_email+"','"+_nick+"','"+_pass+"',"+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+0+","+100+","+0+","+100+", "+2500;
                    new  uploadAsyncTask().execute("adduser", post,"","","","");
                    RelativeLayout mainRL = findViewById(R.id.mainRL);
                    mainRL.setVisibility(View.VISIBLE);
@@ -1081,7 +1135,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
 
 //            for (int t=0;t<cityLocs.size();t++)
 //            {
-//                Log.d("city", ""+t+": "+cityLocs.get(t).city+", id is "+cityLocs.get(t).id);
+//                //Log.d("city", ""+t+": "+cityLocs.get(t).city+", id is "+cityLocs.get(t).id);
 //            }
 
     }
@@ -1101,7 +1155,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
                 mp.start();
                 t_radio.setTextColor(Color.parseColor("#ff9600"));
                 t_radio.setText("Радио ON");
-           //     Log.d("playing","Пытаюсь запустить "+url);
+           //     //Log.d("playing","Пытаюсь запустить "+url);
             } catch (IOException e) {
 
             }
@@ -1132,13 +1186,42 @@ dismiss.setOnClickListener(new View.OnClickListener() {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         //mMap.getUiSettings().setRotateGesturesEnabled(false);
+
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(position)
-                .zoom(15)
+                .zoom(getZoom)
                 .build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         mMap.animateCamera(cameraUpdate);
+        mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                String place = "";
+                LatLng center=mMap.getCameraPosition().target;
+                String centcoord = "Шир.: "+center.latitude+", Долг.: "+center.longitude;
+                if (city.length()>0) place = ", "+city;
+                else place=", Координаты не определены";
+                player.setText(settings.getString(NICK,"")+place+"\n"+centcoord);
+                getZoom=mMap.getCameraPosition().zoom;
+            }
+        });
         mapReady=true;
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                //ToDo Обработчик маркеров локаций
+               Log.d ("tag", ""+marker.getTag());
+               String [] splitting = (""+marker.getTag()).split(":");
+               String info = mutants.get(Integer.parseInt(splitting[0])).info;
+               Mutants isMutant = mutants.get(Integer.parseInt(splitting[0]));
+               showMutantInfoDialog(isMutant, marker);
+                return false;
+            }
+        });
+
+
+
 
     }
 
@@ -1184,7 +1267,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
      */
     @Override
     public void onCompletion(MediaPlayer mp) {
-     //   Log.d("stopPlay", "Остановка проигрывания");
+     //   //Log.d("stopPlay", "Остановка проигрывания");
         releaseMP();
         startPlay();
     }
@@ -1202,7 +1285,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
         }
 
         protected void onPostExecute(Double result) {
-           // Log.d("result", ""+result);
+           // //Log.d("result", ""+result);
         }
 
         protected void onProgressUpdate(Integer... progress) {
@@ -1212,7 +1295,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
             HttpClient httpclient = new DefaultHttpClient();
             String getUri = String.format(domain + "%s.php", isUri);
             ResponseHandler<String> res = new BasicResponseHandler();
-            Log.e("Orientation", ""+getResources().getConfiguration().orientation);
+      //      //Log.e("Orientation", ""+getResources().getConfiguration().orientation);
             System.out.println(getUri + ", " + post1 + ", " + post2 + ", " + post3+ ", " + post4);
             HttpPost httppost = new HttpPost(getUri);
             try {
@@ -1250,7 +1333,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
         }
 
         protected void onPostExecute(Double result) {
-         //   Log.d("result", ""+result);
+         //   //Log.d("result", ""+result);
         }
 
         protected void onProgressUpdate(Integer... progress) {
@@ -1259,7 +1342,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
         public void postData(String isUri, String post1, String post2, String post3, String post4, String post5, String post6, String post7, String post8) {
             HttpClient httpclient = new DefaultHttpClient();
             String getUri = String.format(volcDomain + "%s.php", isUri);
-            Log.e("VolcAsync", getUri + ", " + post1 + ", " + post2 + ", " + post3+ ", " + post4);
+        //    //Log.e("VolcAsync", getUri + ", " + post1 + ", " + post2 + ", " + post3+ ", " + post4);
             ResponseHandler<String> res = new BasicResponseHandler();
             HttpPost httppost = new HttpPost(getUri);
             try {
@@ -1312,7 +1395,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
 
 
     public void getJSON(final String urlWebService) {
-        Log.e("script", urlWebService);
+        //Log.e("script", urlWebService);
         class GetJSON extends AsyncTask<Void, Void, String> {
 
             @Override
@@ -1328,7 +1411,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
                 {return;}
 
                 if (s != null) {
-                 //   Log.d("taken S", s);
+                 //   //Log.d("taken S", s);
 
                     try {
 
@@ -1355,6 +1438,8 @@ dismiss.setOnClickListener(new View.OnClickListener() {
 
                         if (urlWebService == getVersion)
                         {loadVersion(s);return;}
+                        if (urlWebService == getMonsters)
+                        {loadMonsters(s);return;}
 
 
 
@@ -1375,6 +1460,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
                     StringBuilder sb = new StringBuilder();
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
                     String json;
+                    Log.d("setjson", "a time "+urlWebService);
                     while ((json = bufferedReader.readLine()) != null) {
                         sb.append(json + "\n");
                     }
@@ -1409,7 +1495,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
                 {return;}
 
                 if (s != null) {
-                  //  Log.d("taken S", s);
+                   // //Log.d("taken parametric S", s);
 
                     try {
 
@@ -1461,18 +1547,72 @@ dismiss.setOnClickListener(new View.OnClickListener() {
 
         @Override
         public void run() {
+            botcounter++;
+            chatcounter++;
+           // if (city.length()>0 && mutant==null)
+               // setMutants();
+
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (chatcounter>10)
+                    {new uploadVolcAsyncTask().execute("getchat", KeyHelper.fpr, settings.getString(ID,""), ""+ lastchatid,"","","","","" );
+                    getJSON(getCount);
+                    sendmessage=true;
+                    chatcounter=0;
+                    }
+
+                    if (botcounter>1)
+                    {
+                        if (mapReady && mutant!=null) {
+                            for (int i=0;i<mutantMarker.length;i++)
+                            {
+                            if (mutantMarker[i] != null)
+                                mutantMarker[i].remove();
+                            if (mutant[i]!=null)
+                            {mutantMarker[i] = (mMap.addMarker(new MarkerOptions()
+                                        .position(mutant[i].getPosition())
+                                        .title(mutantbase.get(i).mutantName)
+                                        .icon(getBitmapMutantDescriptor(mutantbase.get(i).drawmarker))));
+                                mutantMarker[i].setTag(""+mutantbase.get(i).id+":"+i);
+                                Log.d(mutantbase.get(i).mutantName+" "+i, ""+mutant[i].getDistance());}
+                            }
+
+                        }
+                        botcounter=0;
+                    }
+
+                }
+            });
+        }
+
+    }
+
+
+    class BotTimerTask extends TimerTask {
+
+        @Override
+        public void run() {
 
 
             runOnUiThread(new Runnable() {
 
                 @Override
                 public void run() {
-                    new uploadVolcAsyncTask().execute("getchat", KeyHelper.fpr, settings.getString(ID,""), ""+ lastchatid,"","","","","" );
-//                    getchat="http://a0568345.xsph.ru/winter/getchat.php/get.php?nom="+lastID;
-//                    getJSON(getchat);
+                   // krovosos.getPosition();
+//                    if (mapReady) {
+//                        if (mutantMarker[0] != null)
+//                            mutantMarker[0].remove();
+//                        if (krovosos != null) {
+//                            mutantMarker[0] = (mMap.addMarker(new MarkerOptions()
+//                                    .position(krovosos.getPosition())
+//                                    .title("Кровосос")
+//                                    .icon(getBitmapMutantDescriptor(R.drawable.krovosos))));
+//                        }
+//                    }
 
-                    getJSON(getCount);
-                    sendmessage=true;
+
                 }
             });
         }
@@ -1483,7 +1623,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
         JSONArray jsonArray = new JSONArray(json);
         final ChatAdapter[] chatAdapter = new ChatAdapter[1];
         //posts.clear();
-     //   Log.d("MPdata", ""+mp);
+     //   //Log.d("MPdata", ""+mp);
 
         if (jsonArray.length() == 0) { Log.d ("data", "No data");
 //            chatAdapter[0] = new ChatAdapter(this, posts, this);
@@ -1510,7 +1650,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
                 String receiver = obj.getString("receiver");
                 int scoder= Integer.parseInt(scode);
                 int isID=Integer.parseInt(settings.getString(ID,""));
-                Log.e("scoder",Integer.parseInt(scode)+", "+Integer.parseInt(settings.getString(ID,"")));
+                //Log.e("scoder",Integer.parseInt(scode)+", "+Integer.parseInt(settings.getString(ID,"")));
                 if (receiver!=null) {
                  //   if (scoder ==isID )
                         posts.add(new Posts(id_s[i], sender + "->" + receiver, text, timest, 0));
@@ -1641,7 +1781,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
             JSONObject obj = jsonArray.getJSONObject(i);
             String name = obj.getString("name");
             String id = obj.getString("id");
-            Log.e("contacts", ""+id+", " +name);
+            //Log.e("contacts", ""+id+", " +name);
             if (name!=null && name !="null")
             contacts.add(new Contacts(Integer.parseInt(obj.getString("id")),name,0));
             }
@@ -1680,17 +1820,20 @@ dismiss.setOnClickListener(new View.OnClickListener() {
             editor.putString(PASSCODE,obj.getString("pass"));
             editor.putString(ID,obj.getString("id"));
             editor.apply();
-            Log.e("getID", settings.getString(ID,""));
+            //Log.e("getID", settings.getString(ID,""));
             isMoney = Integer.parseInt(obj.getString("fmon"));
-          //  Log.d("Money", ""+isMoney);
+          //  //Log.d("Money", ""+isMoney);
             RelativeLayout mainRL = findViewById(R.id.mainRL);
             mainRL.setVisibility(View.VISIBLE);
             String place = "";
+            LatLng center=mMap.getCameraPosition().target;
+            String centcoord = "Шир.: "+center.latitude+", Долг.: "+center.longitude;
             if (city.length()>0) place = ", "+city;
-            player.setText(settings.getString(NICK,"")+place);
+            else place="Координаты не определены";
+            player.setText(settings.getString(NICK,"")+place+"\n"+centcoord);
             new uploadVolcAsyncTask().execute("getcontact",KeyHelper.fpr,settings.getString(ID,""),"","","","","","");
             int start=settings.getInt(START,0);
-            Log.e("isStart",""+start);
+            //Log.e("isStart",""+start);
             if (start==0)
             {
                 infoRL.setVisibility(View.VISIBLE);
@@ -1717,6 +1860,9 @@ dismiss.setOnClickListener(new View.OnClickListener() {
         String[] alllocs = new String[locnames.length];
 
         if (jsonArray.length() > 0) {
+            if (mutant==null && mutants.size()>0)
+                setMutants();
+
             grouplocs.clear();
                 JSONObject obj = jsonArray.getJSONObject(0);
                 alllocs[0] = obj.getString("cordon");
@@ -1811,7 +1957,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
                 image_s[i] = obj.getString("image");
 
                 isInfo.add(new Info( name_s[i], description_s[i], image_s[i]));
-           //     Log.d("Info", name_s[i]);
+           //     //Log.d("Info", name_s[i]);
 
 
             }
@@ -1833,9 +1979,13 @@ dismiss.setOnClickListener(new View.OnClickListener() {
 
 
         if (jsonArray.length() > 0) {
+
             JSONObject obj = jsonArray.getJSONObject(0);
             int version=Integer.parseInt(obj.getString("v"));
             int curver=Integer.parseInt(getResources().getString(R.string.version));
+            SharedPreferences.Editor editor=settings.edit();
+            editor.putInt(DISTANCE,Integer.parseInt(obj.getString("dist")));
+            editor.apply();
             if (version!=curver)
             {
                 RelativeLayout mainRL=findViewById(R.id.mainRL);
@@ -1843,6 +1993,50 @@ dismiss.setOnClickListener(new View.OnClickListener() {
                 showUpdateDialog();
                 return;
             }
+
+        }
+
+
+    }
+
+    private void loadMonsters(String json) throws JSONException {
+        JSONArray jsonArray = new JSONArray(json);
+        if (jsonArray.length() == 0) { Log.d ("data", "No data");
+            return;
+        }
+
+
+
+        if (jsonArray.length() > 0) {
+            mutantIcons.clear();
+            mutantPics.clear();
+            mutants.clear();
+            mutantIcons.add(R.drawable.krovosos);
+            mutantIcons.add(R.drawable.snork);
+            mutantIcons.add(R.drawable.controler);
+            mutantPics.add(R.drawable.krovososbig);
+            mutantPics.add(R.drawable.snorkbig);
+            mutantPics.add(R.drawable.kontrolerbig);
+            mutantSounds.add(R.raw.krovososattack);
+            mutantSounds.add(R.raw.snorkattack);
+            mutantSounds.add(R.raw.controllerattack);
+
+
+            for (int i=0;i<jsonArray.length();i++) {
+    JSONObject obj = jsonArray.getJSONObject(i);
+    String name = obj.getString("name");
+    int distance = obj.getInt("distance");
+    int hits = obj.getInt("hits");
+    int cost = obj.getInt("cost");
+    int resourse = obj.getInt("icon");
+    int power=obj.getInt("power");
+    String info = obj.getString("info");
+    Log.d("NameFromBase", name);
+    mutants.add(new Mutants(name, hits, distance,cost,
+            power,mutantIcons.get(i),i, info, mutantSounds.get(i), mutantPics.get(i)));
+
+}
+
 
         }
 
@@ -1858,7 +2052,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
         if (jsonArray.length() > 0) {
             JSONObject obj = jsonArray.getJSONObject(0);
             isMoney = Integer.parseInt(obj.getString("fmon"));
-         //   Log.d("requestCode",""+requestCode);
+         //   //Log.d("requestCode",""+requestCode);
             if (requestCode==1) tradeDialog(sellitem, selldesc, sellprice, currentloc, itemfield, 1);
             if (requestCode==3) tradeDialog(sellitem, selldesc, buyprice, currentloc, itemfield, 2);
 
@@ -1971,7 +2165,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
 
     private void loadInventory(String json, int requestcode) throws JSONException {
         JSONArray jsonArray = new JSONArray(json);
-        if (jsonArray.length() == 0) { Log.d ("data", "No data");
+        if (jsonArray.length() == 0) { Log.d ("inv", "No JSON");
 
             return;
         }
@@ -2003,22 +2197,37 @@ dismiss.setOnClickListener(new View.OnClickListener() {
             inventory.add(obj.getString("flower"));
             inventory.add(obj.getString("pust"));
             String money=obj.getString("money");
-            if (requestcode<5000)
-            showshopdialog(requestcode, inventory, money);
+            int weapon = Integer.parseInt(obj.getString("weapon"));
+            int suit = Integer.parseInt(obj.getString("suit"));
+            SharedPreferences.Editor editor=settings.edit();
+            editor.putInt(WEAPON,weapon);
+            editor.putInt(SUIT,suit);
+            editor.apply();
+            if (requestcode<5000) {
+                showshopdialog(requestcode, inventory, money);
+                if (currentloc == 0) {
+                    Audio audio = new Audio(getApplicationContext());
+                    audio.playSidor();
+                }
+                 else
+                {
+            Audio audio = new Audio(getApplicationContext());
+            audio.playGreeting();}
+
+            }
             if (requestcode==10123)
             {
-                    showInventory(inventory,money);
+                    showInventory(inventory,money, weapon, suit);
             }
         }
 
 
     }
 
-    private void showInventory(ArrayList<String> inventory, String _money) {
+    private void showInventory(ArrayList<String> inventory, String _money, int _weapon, int _suit) {
         playerunits.clear();
-        TextView money=findViewById(R.id.invmoney);
-        money.setText(_money+" RU");
-        Log.d("inventory", inventory.get(1));
+
+      //  //Log.d("inventory", inventory.get(0));
 
         playerunits.add(new PlayerUnits("Аптечка","medikits",R.id.invmedikit, R.id.qinvmedikit));
         playerunits.add(new PlayerUnits("Бинт","bints",R.id.invbint, R.id.qinvbint));
@@ -2043,6 +2252,35 @@ dismiss.setOnClickListener(new View.OnClickListener() {
         playerunits.add(new PlayerUnits("Лунный свет","moonlight",R.id.invmoonlight, R.id.qinvmoonlite));
         playerunits.add(new PlayerUnits("Каменный цветок","flower",R.id.invflower, R.id.qinvflower));
         playerunits.add(new PlayerUnits("Пустышка","pust",R.id.invpust, R.id.qinvpust));
+        ImageView invweapon=findViewById(R.id.invweapon);
+        ImageView invsuit=findViewById(R.id.invsuit);
+        ImageView detector = findViewById(R.id.detector);
+        //TextView money=findViewById()
+        TextView money=findViewById(R.id.invmoney);
+        money.setText(_money+" RU");
+
+        invweapon.setImageResource(weapons.get(_weapon));
+        invsuit.setImageResource(suits.get(_suit));
+
+        invsuit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setSuit(suits.get(0),"0");
+            }
+        });
+
+        detector.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Log.d("detector","isDetector");
+                Audio audio= new Audio(getApplicationContext());
+                audio.playDetector();
+
+            }
+        });
+
+
+
 
 
 
@@ -2062,9 +2300,15 @@ dismiss.setOnClickListener(new View.OnClickListener() {
             }
             int finalI = i;
             invitems[i].setOnClickListener(view1 -> {
-
+                String dataweapon;
                 invitemfield = playerunits.get(finalI).field;
-                Log.d("inventory", invitemfield);
+                if (finalI==8) setWeapon(weapons.get(0),"0"); //PM
+                if (finalI==9) setWeapon(weapons.get(1),"1");//Obrez
+                if (finalI==10) setWeapon(weapons.get(2),"2");//kalak
+                if (finalI==11) setWeapon(weapons.get(3),"3");//svd
+                if (finalI==12) setSuit(suits.get(1),"1"); //zaria
+                if (finalI==13) setSuit(suits.get(2),"2");//seva
+                if (finalI==14) setSuit(suits.get(3),"3");//
 
             });
 
@@ -2077,6 +2321,26 @@ dismiss.setOnClickListener(new View.OnClickListener() {
         locLL.setVisibility(View.GONE);
         invLL.setVisibility(View.VISIBLE);
         enc.setVisibility(View.GONE);
+    }
+
+    private void setSuit(Integer i, String s) {
+
+        ImageView suit = findViewById(R.id.invsuit);
+        suit.setImageResource(i);
+        SharedPreferences.Editor editor=settings.edit();
+        editor.putInt(SUIT,i);
+        new uploadVolcAsyncTask().execute("setsuit", KeyHelper.fpr, s, email,"","","","","" );
+
+    }
+
+    private void setWeapon(Integer i, String s) {
+        ImageView weapon = findViewById(R.id.invweapon);
+        weapon.setImageResource(i);
+        SharedPreferences.Editor editor=settings.edit();
+        editor.putInt(WEAPON,i);
+        new uploadVolcAsyncTask().execute("setweapon", KeyHelper.fpr, s, email,"","","","","" );
+
+
     }
 
     private void loadCount(String json) throws JSONException {
@@ -2149,6 +2413,122 @@ dismiss.setOnClickListener(new View.OnClickListener() {
         dialog.show();
     }
 
+
+    private void showMutantInfoDialog(Mutants _mutant, Marker marker)
+    {
+
+        AlertDialog.Builder alert;
+        AlertDialog dialog;
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
+        {
+            alert=new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        }
+        else
+        {
+            alert=new AlertDialog.Builder(this);
+        }
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.mutantinfodialog,null);
+        ImageView mutant = view.findViewById(R.id.mutant);
+        TextView info = view.findViewById(R.id.mutantinfo);
+        TextView mutname = view.findViewById(R.id.mutname);
+        mutname.setText(_mutant.name);
+        TextView dist = view.findViewById(R.id.distance);
+        dist.setText("Дистанция атаки: "+_mutant.distance);
+        TextView hits = view.findViewById(R.id.hits);
+        hits.setText("Здоровье: "+_mutant.hits);
+        TextView power = view.findViewById(R.id.power);
+        power.setText("Сила атаки: "+_mutant.power);
+        TextView cost = view.findViewById(R.id.cost);
+        cost.setText ("Премия за уничтожение: "+_mutant.cost);
+        mutant.setImageResource(mutantPics.get(_mutant.id));
+        Button fight = view.findViewById(R.id.fight);
+        info.setText(_mutant.info);
+        TextView geodistance=view.findViewById(R.id.geodistance);
+        double lat=marker.getPosition().latitude;
+        double lon = marker.getPosition().longitude;
+        double playerlat=imhere.getPosition().latitude;
+        double playerlon = imhere.getPosition().longitude;
+
+        int distanceToGo = (int) (distanceInKmBetweenEarthCoordinates(lat,lon,playerlat,playerlon)*1000);
+        geodistance.setText ("Текущая дистанция, м.: "+distanceToGo);
+        int isDistance = settings.getInt(DISTANCE,500);
+        if (distanceToGo<isDistance)
+        {
+            geodistance.setTextColor(Color.parseColor("#ff0000"));
+            fight.setVisibility(View.VISIBLE);
+        }
+
+        else
+
+        {geodistance.setTextColor(Color.parseColor("#ffffff"));
+            fight.setVisibility(View.GONE);
+        }
+
+        alert.setView(view);
+        alert.setCancelable(false);
+
+        dialog = alert.create();
+        mutant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        fight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setToast("Боевая система в разработке");
+                showFightDialog(_mutant);
+                dialog.dismiss();
+            }
+        });
+
+
+
+        dialog.show();
+    }
+
+    AlertDialog.Builder fightalert;
+    AlertDialog fightdialog;
+    private void showFightDialog(Mutants _mutant)
+    {
+        Audio audio = new Audio(getApplicationContext());
+        audio.playMutant(_mutant.sound);
+
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
+        {
+            fightalert=new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        }
+        else
+        {
+            fightalert=new AlertDialog.Builder(this);
+        }
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.fight,null);
+        ImageView mutant = view.findViewById(R.id.mutant);
+
+        //Button fight = view.findViewById(R.id.fight);
+
+
+        fightalert.setView(view);
+        fightalert.setCancelable(false);
+
+        fightdialog = fightalert.create();
+        mutant.setImageResource(_mutant.picture);
+
+
+        mutant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fightdialog.dismiss();
+            }
+        });
+
+        fightdialog.show();
+    }
+
+
     private void showPopupMenu(View v, String message)
     {
         PopupMenu popupMenu = new PopupMenu(this, v);
@@ -2177,7 +2557,11 @@ dismiss.setOnClickListener(new View.OnClickListener() {
 
         @Override
         public void onLocationChanged(Location location) {
-            showLocation(location);
+            try {
+                showLocation(location);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
@@ -2199,7 +2583,11 @@ dismiss.setOnClickListener(new View.OnClickListener() {
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            showLocation(locationManager.getLastKnownLocation(provider));
+            try {
+                showLocation(locationManager.getLastKnownLocation(provider));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
@@ -2212,7 +2600,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
         }
     };
 String lat="0", lon="0";
-    private void showLocation(Location location) {
+    private void showLocation(Location location) throws IOException {
         double distance;
         double mindist=400000;
 
@@ -2225,21 +2613,24 @@ String lat="0", lon="0";
             lon=""+location.getLongitude();
 
             comLocation=location;
-        //    Log.d("Coord", lat+", "+lon);
+        //    //Log.d("Coord", lat+", "+lon);
             for (int i=0;i<cityLocs.size();i++)
             {
                 distance = distanceInKmBetweenEarthCoordinates(location.getLatitude(),location.getLongitude(),cityLocs.get(i).latitude, cityLocs.get(i).longitude);
               //  distance = distanceInKmBetweenEarthCoordinates(53,158,cityLocs.get(i).latitude, cityLocs.get(i).longitude);
-                position = new LatLng(cityLocs.get(i).latitude, cityLocs.get(i).longitude);
+
                 if (distance<mindist)
                 {mindist=distance;
                 city = cityLocs.get(i).city;
                 id=cityLocs.get(i).id;
+                position = new LatLng(cityLocs.get(i).latitude, cityLocs.get(i).longitude);
                 player.setText(settings.getString(NICK,"")+", "+city);
+
                 }
-                           
+
             }
-       //     Log.d("Distance",city+", "+id);
+
+       //     //Log.d("Distance",city+", "+id);
             getLocs = "http://a0568345.xsph.ru/winter/getlocations.php/get.php?nom="+id;
             getJSON(getLocs);
             for (int i=0;i<grouplocs.size();i++)
@@ -2261,11 +2652,39 @@ String lat="0", lon="0";
             LatLng position=new LatLng(Double.parseDouble(lat),Double.parseDouble(lon));
             if (imhere!=null && mapReady) imhere.remove();
             if (mapReady){
-            imhere=(mMap.addMarker(new MarkerOptions()
+
+                imhere=(mMap.addMarker(new MarkerOptions()
                     .position(position)
                     .title("Я здесь")
+                    //.icon(BitmapDescriptorFactory.fromBitmap(getBitmapFromURL(resDomain+"krovosos.png")))));}
                     .icon(getBitmapHighDescriptor(R.drawable.marker))));}
         }
+    }
+
+    private void setMutants() {
+
+        mutant = new BotMutant[mutantMarker.length];
+
+        for (int i=0;i<mutantMarker.length;i++)
+        {
+            Random rnd = new Random();
+            int selectMut = rnd.nextInt(mutants.size());
+
+            Log.d ("mutantbase",""+ (position.latitude+getGen())+":"
+                    +(position.longitude+getGen())+" Mutant # "+i+" Mutant is "+selectMut+", "+
+                    mutants.get(selectMut).name);
+            LatLng mutPosition = new LatLng(position.latitude+getGen(),position.longitude+getGen());
+            mutantbase.add(new BotMutant(mutPosition,5, mutantMarker[i],
+                    mutants.get(selectMut).name,mutants.get(selectMut).icon, mutants.get(selectMut).id));
+        }
+
+        for (int j=0;j<mutantbase.size();j++)
+        {
+            mutant[j] =mutantbase.get(j);
+
+            Log.d("mutanticon", ""+mutantbase.get(j).drawmarker);
+        }
+        Log.d("mutants2", ""+mutantbase.size());
     }
 
 
@@ -2276,6 +2695,47 @@ String lat="0", lon="0";
         Canvas canvas = new Canvas(bm);
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bm);
+    }
+
+    private BitmapDescriptor getBitmapMutantDescriptor(int id) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(getApplicationContext(), id);
+        vectorDrawable.setBounds(0, 0, 100, 130);
+        Bitmap bm = Bitmap.createBitmap(100, 130, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bm);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bm);
+    }
+
+    public Bitmap getBitmapFromURL (String link) throws IOException {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        String imageURLBase = link;
+        URL imageURL = new URL(imageURLBase);
+        Bitmap.Config config = null;
+        URLConnection connection = imageURL.openConnection();
+        InputStream iconStream = connection.getInputStream();
+       Bitmap bmp = BitmapFactory.decodeStream(iconStream);
+       return bmp;
+    }
+
+    public Bitmap getBitmapFromLink(String link) {
+        try {
+            URL url = new URL(link);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            try {
+                connection.connect();
+            } catch (Exception e) {
+
+            }
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            Log.v("asfwqeds", e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
@@ -2324,9 +2784,10 @@ String lat="0", lon="0";
             // Signed in successfully, show authenticated UI.
 
             acct = result.getSignInAccount();
-         //   Log.d("isEmail", acct.getEmail());
+         //   //Log.d("isEmail", acct.getEmail());
             getUser="http://a0568345.xsph.ru/winter/getusers.php/get.php?nom="+acct.getEmail();
-            Log.e("getUser", getUser);
+
+           Log.e("getUser", getUser);
             getJSON(getUser);
            // showAuthDialog(acct.getEmail());
         }
@@ -2342,18 +2803,75 @@ String lat="0", lon="0";
                 md = MessageDigest.getInstance(hashStretagy);
                 md.update(signature.toByteArray());
                 String something = new String(Base64.encode(md.digest(), 0));
-                Log.e("KeyHash  -->>>>>>>>>>>>" , something);
+                //Log.e("KeyHash  -->>>>>>>>>>>>" , something);
 
                 // Notification.registerGCM(this);
             }
         } catch (PackageManager.NameNotFoundException e1) {
-            Log.e("name not found" , e1.toString());
+            //Log.e("name not found" , e1.toString());
         } catch (NoSuchAlgorithmException e) {
-            Log.e("no such an algorithm" , e.toString());
+            //Log.e("no such an algorithm" , e.toString());
         } catch (Exception e) {
-            Log.e("exception" , e.toString());
+            //Log.e("exception" , e.toString());
         }
     }
 
+
+    public void animateMarker(final Marker marker, final LatLng toPosition,
+                              final boolean hideMarker)
+    {
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        Projection proj = mMap.getProjection();
+        Point startPoint = proj.toScreenLocation(marker.getPosition());
+        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+        final long duration = 300000;
+
+        final LinearInterpolator interpolator = new LinearInterpolator();
+
+        handler.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = interpolator.getInterpolation((float) elapsed
+                        / duration);
+                double lng = t * toPosition.longitude + (1 - t)
+                        * startLatLng.longitude;
+                double lat = t * toPosition.latitude + (1 - t)
+                        * startLatLng.latitude;
+                marker.setPosition(new LatLng(lat, lng));
+
+                if (t < 1.0)
+                {
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 16);
+                }
+                else
+                {
+                    if (hideMarker)
+                    {
+                        marker.setVisible(false);
+                    }
+                    else
+                    {
+                        marker.setVisible(true);
+                    }
+                }
+            }
+        });
+    }
+
+    private double getGen()
+    {
+        double maxGen = 0.06;
+        double minGen= -0.06;
+        Random rnd = new Random();
+        double randomLatValue = minGen + (maxGen - minGen) * rnd.nextDouble();
+        String formattedLatDouble = new DecimalFormat("#0.0000000").format(randomLatValue);
+        double gen = Double.parseDouble(formattedLatDouble.replace(",","."));
+        return gen;
+    }
 
 }

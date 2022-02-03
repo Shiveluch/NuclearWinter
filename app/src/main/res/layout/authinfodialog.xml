@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="#DFDEDE">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/tetrad"
+        android:background="@drawable/backmap"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="30dp"
             android:orientation="horizontal">
 
             <EditText
@@ -26,11 +28,11 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:ems="10"
-                android:fontFamily="@font/betina"
+                android:fontFamily="@font/graffiti"
                 android:hint="Позывной"
                 android:inputType="textPersonName"
-                android:textColor="#0504AA"
-                android:textColorHint="#770504AA"
+                android:textColor="#323232"
+                android:textColorHint="#F3555555"
                 android:textStyle="bold" />
 
             <EditText
@@ -41,11 +43,11 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:ems="10"
-                android:fontFamily="@font/betina"
+                android:fontFamily="@font/graffiti"
                 android:hint="Личный код"
                 android:inputType="textPersonName"
-                android:textColor="#0504AA"
-                android:textColorHint="#770504AA"
+                android:textColor="#323232"
+                android:textColorHint="#F3555555"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -60,30 +62,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:layout_weight="78"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView"
+                style="@style/ShopQ"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/betina"
                 android:text="Необходимо ввести свой позывной и личный код. \n\nЛичный код будет использоваться для отправки вам сообщений. \n\nЛичный код и позывной не могут быть короче 4 символов"
-                android:textColor="#050EAA"
-                android:textSize="16sp" />
+                android:textColor="#1B1B1B"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/textView2"
+                style="@style/ShopQ"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/betina"
                 android:text="Для корректной работы приложения необходимо разрешить доступ к определению местоположения\n\nПосле определения координат станут доступны окружающие локации"
-                android:textColor="#050EAA"
-                android:textSize="16sp" />
+                android:textColor="#252525"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -110,6 +114,11 @@
                 android:text="Отменить"
                 android:textColor="#000000" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="vertical"></LinearLayout>
 
     </LinearLayout>
 </RelativeLayout>
