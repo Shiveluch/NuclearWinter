@@ -98,6 +98,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -133,18 +134,25 @@ public class MainActivity extends AppCompatActivity
     String selldesc="";
     String itemfield="";
     String invitemfield="";
+    boolean invready=false;
     int itemquantity=0;
     int sellprice=0, buyprice=0;
     int contactID=0;
     int botcounter=0;
     int chatcounter=0;
+    int currentmedikits, currentbints, mainammo,addammo;
+    int mainshells, addshells;
     //BotMutant krovosos, snork, controler;
     BotMutant [] mutant;
+    Weapons weapons = new Weapons();
 
     String getStalkers="http://a0568345.xsph.ru/winter/getstalkers.php";
     String getVersion="http://a0568345.xsph.ru/winter/getversion.php";
     String getLocs="";
+    String getProprty="http://a0568345.xsph.ru/winter/getproperty.php";
     String getMonsters = "http://a0568345.xsph.ru/winter/getmonsters.php";
+    String getWeapons = "http://a0568345.xsph.ru/winter/getweaponinfo.php";
+    String getshells="";
     String getCount="http://a0568345.xsph.ru/winter/getlast.php";
     String getaudio = "https://volcanorp.ru/tracks/getfilescount.php";
     String getCitiesLoc = "http://a0568345.xsph.ru/winter/getcities.php";
@@ -184,19 +192,26 @@ public class MainActivity extends AppCompatActivity
     public final static String DISTANCE = "distance";
     public final static String WEAPON = "weapon";
     public final static String SUIT = "suit";
+    public final static String MAINSHELLS = "mainshells";
+    public final static String ADDSHELLS = "addshells";
+
+
 
     private GoogleApiClient mGoogleApiClient;
     //ArrayList<Drawables> drawables = new ArrayList();
     ArrayList<Shopunits> shopunits = new ArrayList();
     ArrayList<PlayerUnits> playerunits = new ArrayList();
     ArrayList<Contacts> contacts=new ArrayList<>();
-    ArrayList<Integer> weapons = new ArrayList<>();
+    ArrayList<WeaponsInfo> weaponsInfo = new ArrayList<>();
     ArrayList<Integer> suits = new ArrayList<>();
     ArrayList<Mutants> mutants = new ArrayList<>();
     ArrayList<BotMutant> mutantbase = new ArrayList<>();
     ArrayList<Integer> mutantIcons=new ArrayList<>();
     ArrayList<Integer> mutantPics=new ArrayList<>();
     ArrayList<Integer> mutantSounds=new ArrayList<>();
+    ArrayList<Integer> weapon = new ArrayList<>();
+    ArrayList<InvProperty> invProperties = new ArrayList<>();
+
 
 
 
@@ -233,7 +248,7 @@ ArrayList<String> alllocations=new ArrayList<>();
     boolean sendmessage=true;
     Activity activity;
     ArrayList<CityLoc> cityLocs = new ArrayList<>();
-    Weapons weapon = new Weapons();
+    //Weapons weapon;
     Suits suit = new Suits();
     AlertDialog.Builder authalert;
     AlertDialog authdialog;
@@ -273,7 +288,7 @@ ArrayList<String> alllocations=new ArrayList<>();
         botTimerTask = new BotTimerTask();
         botMoveTimer.schedule(botTimerTask, 1000, 5000);
 
-        weapons = weapon.setWeapons();
+        //weapons = weapon.setWeapons();
         suits = suit.setSuits();
 
         //Log.d("Suit", "suit is "+suits.get(1));
@@ -310,6 +325,10 @@ ArrayList<String> alllocations=new ArrayList<>();
         });
 
         getJSON(getMonsters);
+        getJSON(getWeapons);
+        getJSON(getProprty);
+        weapon=weapons.setWeapons();
+
 
     }
 
@@ -341,6 +360,7 @@ ArrayList<String> alllocations=new ArrayList<>();
         activity=this;
 
         getJSON(getVersion);
+
 
 
 
@@ -383,9 +403,9 @@ ArrayList<String> alllocations=new ArrayList<>();
 
 
         String cities = settings.getString(CITIES,"");
+
         if (cities.length()==0)
         {
-          //  //Log.d("cities", "noCities");
             getJSON(getCitiesLoc);}
         else {cityLocs.clear();setCityLocArray();}
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -791,7 +811,7 @@ t_showme.setOnClickListener(new View.OnClickListener() {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        //super.onBackPressed();
     }
     AlertDialog.Builder shopalert;
     AlertDialog shopdialog;
@@ -1129,6 +1149,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
                      double lat = Double.parseDouble(citiesLevelTwo[1].replace(",","."));
                      double lon = Double.parseDouble(citiesLevelTwo[2].replace(",","."));
                      int id = Integer.parseInt(citiesLevelTwo[3]);
+
                      cityLocs.add(new CityLoc(city,lat,lon,id));
 
             }
@@ -1210,12 +1231,17 @@ dismiss.setOnClickListener(new View.OnClickListener() {
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                //ToDo Обработчик маркеров локаций
+               String markerinfo=""+marker.getTag();
+               if (markerinfo.contains(":")){
+               invready=false;
                Log.d ("tag", ""+marker.getTag());
                String [] splitting = (""+marker.getTag()).split(":");
                String info = mutants.get(Integer.parseInt(splitting[0])).info;
                Mutants isMutant = mutants.get(Integer.parseInt(splitting[0]));
-               showMutantInfoDialog(isMutant, marker);
+               WeaponsInfo currentWeapon = weaponsInfo.get(settings.getInt(WEAPON,0));
+               getinventory = "https://volcanorp.ru/winter/getinventory.php/?nom="+email;
+               getParametricJSON(getinventory,11202,"","");
+               showMutantInfoDialog(isMutant, currentWeapon, marker);}
                 return false;
             }
         });
@@ -1417,6 +1443,8 @@ dismiss.setOnClickListener(new View.OnClickListener() {
 
                         if (urlWebService == getaudio) {loadaudio(s);return;}
 
+                        if (urlWebService == getProprty) {loadProperty(s);return;}
+
                         if (urlWebService == getCitiesLoc) {loadCities(s);return;}
 
                         if (urlWebService == getLocs) {loadLocations(s);return;}
@@ -1440,6 +1468,9 @@ dismiss.setOnClickListener(new View.OnClickListener() {
                         {loadVersion(s);return;}
                         if (urlWebService == getMonsters)
                         {loadMonsters(s);return;}
+                        if (urlWebService == getWeapons)
+                        {loadWeapons(s);return;}
+
 
 
 
@@ -1492,10 +1523,12 @@ dismiss.setOnClickListener(new View.OnClickListener() {
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 if (s==null)
-                {return;}
+                {
+                    Log.d("s is null","");
+                    return;}
 
                 if (s != null) {
-                   // //Log.d("taken parametric S", s);
+                Log.d("taken parametric S", s);
 
                     try {
 
@@ -1731,6 +1764,27 @@ dismiss.setOnClickListener(new View.OnClickListener() {
 
     }
 
+    private void loadProperty(String json) throws JSONException {
+        JSONArray jsonArray = new JSONArray(json);
+        cityLocs.clear();
+        if (jsonArray.length() == 0) { return;
+        }
+
+        if (jsonArray.length() > 0) {
+            for (int i = 0; i < jsonArray.length(); i++) {
+//
+                JSONObject obj = jsonArray.getJSONObject(i);
+                String name=obj.getString("name");
+                int prop=obj.getInt("property");
+                invProperties.add(new InvProperty(name,prop));
+
+            }
+
+        }
+
+
+    }
+
     private void loadCities(String json) throws JSONException {
         JSONArray jsonArray = new JSONArray(json);
         cityLocs.clear();
@@ -1820,6 +1874,9 @@ dismiss.setOnClickListener(new View.OnClickListener() {
             editor.putString(PASSCODE,obj.getString("pass"));
             editor.putString(ID,obj.getString("id"));
             editor.apply();
+            email=settings.getString(EMAIL,"");
+            nick=settings.getString(NICK,"");
+            pass=settings.getString(PASSCODE,"");
             //Log.e("getID", settings.getString(ID,""));
             isMoney = Integer.parseInt(obj.getString("fmon"));
           //  //Log.d("Money", ""+isMoney);
@@ -2031,11 +2088,43 @@ dismiss.setOnClickListener(new View.OnClickListener() {
     int resourse = obj.getInt("icon");
     int power=obj.getInt("power");
     String info = obj.getString("info");
+    int speed = obj.getInt("speed");
     Log.d("NameFromBase", name);
     mutants.add(new Mutants(name, hits, distance,cost,
-            power,mutantIcons.get(i),i, info, mutantSounds.get(i), mutantPics.get(i)));
+            power,mutantIcons.get(i),i, info, mutantSounds.get(i), mutantPics.get(i),speed));
 
 }
+
+
+        }
+
+
+    }
+
+
+    private void loadWeapons(String json) throws JSONException {
+        JSONArray jsonArray = new JSONArray(json);
+        if (jsonArray.length() == 0) { Log.d ("data", "No data");
+            return;
+        }
+
+        if (jsonArray.length() > 0) {
+            weaponsInfo.clear();
+
+            for (int i=0;i<jsonArray.length();i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                String weapon = obj.getString("weapon");
+                int maxd = obj.getInt("maxd");
+                int mind = obj.getInt("mind");
+                int shots = obj.getInt("shots");
+                int uron = obj.getInt("uron");
+                int image=obj.getInt("image");
+                int imageright=obj.getInt("imageright");
+                int ammoimage = obj.getInt("ammoimage");
+                String ammo = obj.getString("ammo");
+               weaponsInfo.add(new WeaponsInfo(i,weapon,maxd,mind,shots,uron,image,imageright,ammoimage,ammo));
+
+            }
 
 
         }
@@ -2199,9 +2288,11 @@ dismiss.setOnClickListener(new View.OnClickListener() {
             String money=obj.getString("money");
             int weapon = Integer.parseInt(obj.getString("weapon"));
             int suit = Integer.parseInt(obj.getString("suit"));
+
             SharedPreferences.Editor editor=settings.edit();
             editor.putInt(WEAPON,weapon);
             editor.putInt(SUIT,suit);
+
             editor.apply();
             if (requestcode<5000) {
                 showshopdialog(requestcode, inventory, money);
@@ -2215,9 +2306,20 @@ dismiss.setOnClickListener(new View.OnClickListener() {
             audio.playGreeting();}
 
             }
-            if (requestcode==10123)
+            if (requestcode==10123 && weaponsInfo!=null)
             {
                     showInventory(inventory,money, weapon, suit);
+            }
+
+            if (requestcode==11202)
+            {
+                currentmedikits = obj.getInt("medikits");
+                currentbints = obj.getInt("bints");
+                mainammo = obj.getInt(weaponsInfo.get(weapon).ammo);
+                addammo = obj.getInt("pistolshells");
+               Log.d("ammo","getammo "+mainammo);
+               invready=true;
+                //showInventory(inventory,money, weapon, suit);
             }
         }
 
@@ -2258,10 +2360,9 @@ dismiss.setOnClickListener(new View.OnClickListener() {
         //TextView money=findViewById()
         TextView money=findViewById(R.id.invmoney);
         money.setText(_money+" RU");
-
-        invweapon.setImageResource(weapons.get(_weapon));
+        ArrayList<Integer> weaponsangled=new WeaponsAngledPics().weaponspics();
+        invweapon.setImageResource(weaponsangled.get(_weapon));
         invsuit.setImageResource(suits.get(_suit));
-
         invsuit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -2302,10 +2403,10 @@ dismiss.setOnClickListener(new View.OnClickListener() {
             invitems[i].setOnClickListener(view1 -> {
                 String dataweapon;
                 invitemfield = playerunits.get(finalI).field;
-                if (finalI==8) setWeapon(weapons.get(0),"0"); //PM
-                if (finalI==9) setWeapon(weapons.get(1),"1");//Obrez
-                if (finalI==10) setWeapon(weapons.get(2),"2");//kalak
-                if (finalI==11) setWeapon(weapons.get(3),"3");//svd
+                if (finalI==8) setWeapon(weaponsInfo.get(0).image,"0",0); //PM
+                if (finalI==9) setWeapon(weaponsInfo.get(1).image,"1",1);//Obrez
+                if (finalI==10) setWeapon(weaponsInfo.get(2).image,"2",2);//kalak
+                if (finalI==11) setWeapon(weaponsInfo.get(3).image,"3",3);//svd
                 if (finalI==12) setSuit(suits.get(1),"1"); //zaria
                 if (finalI==13) setSuit(suits.get(2),"2");//seva
                 if (finalI==14) setSuit(suits.get(3),"3");//
@@ -2333,13 +2434,14 @@ dismiss.setOnClickListener(new View.OnClickListener() {
 
     }
 
-    private void setWeapon(Integer i, String s) {
+    private void setWeapon(Integer i, String s, int weaponID) {
         ImageView weapon = findViewById(R.id.invweapon);
-        weapon.setImageResource(i);
+        ArrayList<Integer> weaponpics = new WeaponsAngledPics().weaponspics();
+        weapon.setImageResource(weaponpics.get(weaponID));
         SharedPreferences.Editor editor=settings.edit();
-        editor.putInt(WEAPON,i);
+        editor.putInt(WEAPON,weaponID);
+        editor.apply();
         new uploadVolcAsyncTask().execute("setweapon", KeyHelper.fpr, s, email,"","","","","" );
-
 
     }
 
@@ -2414,7 +2516,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
     }
 
 
-    private void showMutantInfoDialog(Mutants _mutant, Marker marker)
+    private void showMutantInfoDialog(Mutants _mutant, WeaponsInfo _currentweapon, Marker marker)
     {
 
         AlertDialog.Builder alert;
@@ -2435,8 +2537,6 @@ dismiss.setOnClickListener(new View.OnClickListener() {
         mutname.setText(_mutant.name);
         TextView dist = view.findViewById(R.id.distance);
         dist.setText("Дистанция атаки: "+_mutant.distance);
-        TextView hits = view.findViewById(R.id.hits);
-        hits.setText("Здоровье: "+_mutant.hits);
         TextView power = view.findViewById(R.id.power);
         power.setText("Сила атаки: "+_mutant.power);
         TextView cost = view.findViewById(R.id.cost);
@@ -2444,6 +2544,7 @@ dismiss.setOnClickListener(new View.OnClickListener() {
         mutant.setImageResource(mutantPics.get(_mutant.id));
         Button fight = view.findViewById(R.id.fight);
         info.setText(_mutant.info);
+        Button dismiss=view.findViewById(R.id.close);
         TextView geodistance=view.findViewById(R.id.geodistance);
         double lat=marker.getPosition().latitude;
         double lon = marker.getPosition().longitude;
@@ -2475,13 +2576,38 @@ dismiss.setOnClickListener(new View.OnClickListener() {
                 dialog.dismiss();
             }
         });
-        fight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setToast("Боевая система в разработке");
-                showFightDialog(_mutant);
+
+        dismiss.setOnClickListener(view1 -> dialog.dismiss());
+        fight.setOnClickListener(view12 -> {
+            Intent intent = new Intent(context, fight.class);
+            Mutants mutanttotrans = _mutant;
+            WeaponsInfo weapontotrans = _currentweapon;
+            for (int i=0;i<invProperties.size();i++)
+            {
+                intent.putExtra("invProp"+i,invProperties.get(i));
+            }
+            intent.putExtra("email", settings.getString(EMAIL,""));
+            intent.putExtra("invsize", invProperties.size());
+            intent.putExtra("ismutant", mutanttotrans);
+            intent.putExtra("isweapon", weapontotrans);
+            intent.putExtra("mutant", _mutant.id);
+            intent.putExtra("distanceToGo", distanceToGo);
+            intent.putExtra("medikits", currentmedikits);
+            intent.putExtra("bints", currentbints);
+            intent.putExtra("mainammo", mainammo);
+            intent.putExtra("addammo", addammo);
+            if(invready) {
+                setMutants();
+                startActivity(intent);
+                invready=false;
                 dialog.dismiss();
             }
+
+
+
+//                setToast("Боевая система в разработке");
+//                showFightDialog(_mutant);
+
         });
 
 
@@ -2613,12 +2739,13 @@ String lat="0", lon="0";
             lon=""+location.getLongitude();
 
             comLocation=location;
-        //    //Log.d("Coord", lat+", "+lon);
+            setCityLocArray();
+        Log.d("Coord", lat+", "+lon+", "+cityLocs.size());
             for (int i=0;i<cityLocs.size();i++)
             {
                 distance = distanceInKmBetweenEarthCoordinates(location.getLatitude(),location.getLongitude(),cityLocs.get(i).latitude, cityLocs.get(i).longitude);
               //  distance = distanceInKmBetweenEarthCoordinates(53,158,cityLocs.get(i).latitude, cityLocs.get(i).longitude);
-
+Log.d("CoordDist", ""+distance);
                 if (distance<mindist)
                 {mindist=distance;
                 city = cityLocs.get(i).city;
@@ -2662,6 +2789,8 @@ String lat="0", lon="0";
     }
 
     private void setMutants() {
+        mutant=null;
+        mutantbase.clear();
 
         mutant = new BotMutant[mutantMarker.length];
 

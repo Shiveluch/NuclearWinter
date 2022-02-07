@@ -4,19 +4,25 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/projects/NuclearWinter/app/src/main/res/drawable/etstyle.xml" value="0.1" />
+        <entry key="..\:/projects/NuclearWinter/app/src/main/res/drawable/monstervetricalpb.xml" value="0.19739583333333333" />
+        <entry key="..\:/projects/NuclearWinter/app/src/main/res/drawable/progress_hor1.xml" value="0.1" />
+        <entry key="..\:/projects/NuclearWinter/app/src/main/res/drawable/verticalpb.xml" value="0.19739583333333333" />
+        <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout-land/activity_fight.xml" value="0.1050656660412758" />
         <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout-land/activity_main.xml" value="0.33" />
         <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout-land/pda.xml" value="0.11904761904761904" />
         <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout-land/pda_.xml" value="0.1" />
         <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout/actionsitem.xml" value="0.196875" />
-        <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout/activity_fight.xml" value="0.335" />
+        <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout/activity_fight.xml" value="0.33" />
         <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout/activity_main.xml" value="0.10869565217391304" />
         <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout/addcontact.xml" value="0.25" />
         <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout/authinfodialog.xml" value="0.25" />
+        <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout/battlelogitem.xml" value="0.5565092989985694" />
         <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout/chatadapter.xml" value="0.4580152671755725" />
         <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout/contactitem.xml" value="0.12604166666666666" />
         <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout/dialogue.xml" value="0.21" />
         <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout/fight.xml" value="0.2" />
         <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout/infoadapter.xml" value="0.22" />
+        <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout/infodialog.xml" value="0.25" />
         <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout/menuadapter.xml" value="0.25" />
         <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout/mutantinfodialog.xml" value="0.2" />
         <entry key="..\:/projects/NuclearWinter/app/src/main/res/layout/pda.xml" value="0.14" />

@@ -2,8 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fightscreen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="visible"
     tools:context=".fight">
 
     <RelativeLayout
@@ -39,7 +41,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="3dp"
             android:fontFamily="@font/graffiti"
-            android:text="Кровосос"
+            android:text="Снорк"
             android:textColor="#FFFFFF" />
 
         <LinearLayout
@@ -53,13 +55,27 @@
             android:layout_marginBottom="40dp"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/monsterfightimage"
-                android:layout_width="wrap_content"
-                android:layout_height="150dp"
-                android:layout_marginTop="20dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/snorkbig" />
+                android:orientation="horizontal">
+
+                <ProgressBar
+                    android:id="@+id/monsterhealthpb"
+                    style="@style/Widget.ProgressBar.VerticalMonster"
+                    android:layout_width="12dip"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp" />
+
+                <ImageView
+                    android:id="@+id/monsterfightimage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/snorkbig" />
+            </LinearLayout>
 
             <ListView
                 android:id="@+id/monsterchar"
@@ -122,10 +138,24 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <ListView
-                        android:id="@+id/actionslist"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="120dp" />
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentBottom="true"
+                            app:srcCompat="@android:drawable/arrow_down_float" />
+
+                        <ListView
+                            android:id="@+id/actionslist"
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp" />
+                    </RelativeLayout>
+
                 </LinearLayout>
             </RelativeLayout>
 
@@ -161,65 +191,161 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_below="@id/fightplayername"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:orientation="vertical">
 
-            <LinearLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="4"
                     android:orientation="vertical">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView5"
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:srcCompat="@drawable/stalkerfight" />
+
+                        <ProgressBar
+                            android:id="@+id/healthpb"
+                            style="@style/Widget.ProgressBar.Vertical"
+                            android:layout_width="12dip"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/BasicText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Основное оружие" />
+
+                        <ImageView
+                            android:id="@+id/mainweapon"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            app:srcCompat="@drawable/svd" />
+
+                        <TextView
+                            style="@style/BasicText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Вспомогательное оружие" />
+
+                        <ImageView
+                            android:id="@+id/addweapon"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/pistol" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/fmedikits"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:srcCompat="@drawable/medikit" />
+
+                                <TextView
+                                    android:id="@+id/qmedikits"
+                                    style="@style/ShopQ"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="x10" />
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/fbints"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:srcCompat="@drawable/bint" />
+
+                                <TextView
+                                    android:id="@+id/qbints"
+                                    style="@style/ShopQ"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="x10" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/fmainammo"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:srcCompat="@drawable/svdammo" />
+
+                                <TextView
+                                    android:id="@+id/qmainammo"
+                                    style="@style/ShopQ"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="x10" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/faddammo"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:srcCompat="@drawable/pistolammo" />
+
+                                <TextView
+                                    android:id="@+id/qaddammo"
+                                    style="@style/ShopQ"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="x10" />
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
                 </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/stalkerfight" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    style="@style/BasicText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Основное оружие" />
-
-                <ImageView
-                    android:id="@+id/mainweapon"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    app:srcCompat="@drawable/svd" />
-
-                <TextView
-                    style="@style/BasicText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="Вспомогательное оружие" />
-
-                <ImageView
-                    android:id="@+id/imageView9"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/pistol" />
-
-            </LinearLayout>
+            </ScrollView>
 
         </LinearLayout>
 

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,14 @@ public class ActionsAdapter extends BaseAdapter {
 
         Info p = getStalkers(position);
         ((TextView) view.findViewById(R.id.actionitem)).setText(p.name);
+        if (p.description.equals("1"))
+        {
+            ((TextView) view.findViewById(R.id.actionitem)).setTextColor(Color.parseColor("#00ff00"));
+        }
+        if (p.description.equals("0"))
+        {
+            ((TextView) view.findViewById(R.id.actionitem)).setTextColor(Color.parseColor("#ffffff"));
+        }
 
 
         return view;

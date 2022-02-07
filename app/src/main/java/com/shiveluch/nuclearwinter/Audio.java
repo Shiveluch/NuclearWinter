@@ -84,4 +84,11 @@ public class Audio {
         mp.start();
 
     }
+
+    public void shot(int shotid)
+    {
+        mp = MediaPlayer.create(context, shotid);
+        mp.start();
+
+    }
 }

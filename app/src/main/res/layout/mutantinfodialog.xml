@@ -41,6 +41,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginRight="15dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:orientation="vertical">
@@ -72,15 +73,6 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/hits"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="2dp"
-                        android:fontFamily="@font/graffiti"
-                        android:text="Здоровье"
-                        android:textSize="14sp" />
-
-                    <TextView
                         android:id="@+id/cost"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -98,15 +90,38 @@
                         android:text="Дистанция, м: "
                         android:textSize="14sp" />
 
-                    <Button
-                        android:id="@+id/fight"
-                        style="@style/ShopQ"
-                        android:layout_width="100dp"
-                        android:layout_height="30dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:background="@drawable/rustbutton"
-                        android:text="НАПАСТЬ"
-                        android:textSize="16sp" />
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/fight"
+                            style="@style/ShopQ"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/rustbutton"
+                            android:text="НАПАСТЬ"
+                            android:textSize="16sp" />
+
+                        <Button
+                            android:id="@+id/close"
+                            style="@style/ShopQ"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/rustbutton"
+                            android:text="ЗАКРЫТЬ"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
